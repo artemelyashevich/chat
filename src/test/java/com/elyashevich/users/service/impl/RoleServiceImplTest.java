@@ -5,7 +5,10 @@ import com.elyashevich.users.exception.ResourceAlreadyExistsException;
 import com.elyashevich.users.exception.ResourceNotFoundException;
 import com.elyashevich.users.repository.RoleRepository;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -19,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("Role Service Implementation Tests")
 class RoleServiceImplTest {
 
@@ -28,6 +32,7 @@ class RoleServiceImplTest {
     @InjectMocks
     private RoleServiceImpl roleService;
 
+    @Order(1)
     @ParameterizedTest
     @ValueSource(strings = {"ADMIN", "USER", "MODERATOR"})
     @DisplayName("create_WithValidName_ReturnsCreatedRole")
@@ -48,6 +53,7 @@ class RoleServiceImplTest {
         );
     }
 
+    @Order(2)
     @ParameterizedTest
     @ValueSource(strings = {"ADMIN", "USER", "MODERATOR"})
     @DisplayName("create_WithExistingName_ThrowsResourceAlreadyExistsException")
@@ -69,6 +75,7 @@ class RoleServiceImplTest {
         verify(roleRepository, never()).save(any(Role.class));
     }
 
+    @Order(3)
     @ParameterizedTest
     @ValueSource(strings = {"ADMIN", "USER", "MODERATOR"})
     @DisplayName("findByName_WithExistingName_ReturnsRole")
@@ -87,6 +94,7 @@ class RoleServiceImplTest {
         );
     }
 
+    @Order(4)
     @ParameterizedTest
     @ValueSource(strings = {"ADMIN", "USER", "MODERATOR"})
     @DisplayName("findByName_WithNonExistingName_ThrowsResourceNotFoundException")
@@ -107,6 +115,7 @@ class RoleServiceImplTest {
         verify(roleRepository).findByName(roleName);
     }
 
+    @Order(5)
     @Test
     @DisplayName("update_WithValidNames_ReturnsUpdatedRole")
     void updateRole_WithValidNames_ReturnsUpdatedRole() {
@@ -133,6 +142,7 @@ class RoleServiceImplTest {
         );
     }
 
+    @Order(6)
     @Test
     @DisplayName("update_WithNonExistingOldName_ThrowsResourceNotFoundException")
     void updateRole_WithNonExistingOldName_ThrowsException() {
@@ -157,6 +167,7 @@ class RoleServiceImplTest {
         verify(roleRepository, never()).save(any());
     }
 
+    @Order(7)
     @Test
     @DisplayName("update_WithExistingNewName_ThrowsResourceAlreadyExistsException")
     void updateRole_WithExistingNewName_ThrowsException() {
@@ -183,6 +194,7 @@ class RoleServiceImplTest {
         verify(roleRepository, never()).save(any());
     }
 
+    @Order(8)
     @Test
     @DisplayName("delete_WithExistingName_DeletesRole")
     void deleteRole_WithExistingName_DeletesRole() {
@@ -201,6 +213,7 @@ class RoleServiceImplTest {
         verify(roleRepository).delete(role);
     }
 
+    @Order(9)
     @Test
     @DisplayName("delete_WithNonExistingName_ThrowsResourceNotFoundException")
     void deleteRole_WithNonExistingName_ThrowsException() {
