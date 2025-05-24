@@ -1,4 +1,4 @@
-package com.elyashevuch.demo;
+package com.elyashevich.users;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

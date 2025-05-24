@@ -16,10 +16,12 @@ services:
   postgres:
     image: postgres:latest
     container_name: postgres_container
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: postgres_user
-      POSTGRES_PASSWORD: postgres_password
-      POSTGRES_DB: postgres_db
+      POSTGRES_DB: ${POSTGRES_URL}
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5430:5432"
