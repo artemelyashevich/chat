@@ -4,3 +4,24 @@ spring:
     hibernate:
       ddl-auto: create-drop
   sql.init.mode: always
+
+application:
+  admin:
+    password: adminPassword
+    email: example@example.com
+  open-api:
+    email: ${spring.mail.sender.email}
+    server:  http://127.0.0.1:8222
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+  metrics:
+    tags:
+      application: mmf-ask-app
+  prometheus:
+    metrics:
+      export:
+        enabled: true
