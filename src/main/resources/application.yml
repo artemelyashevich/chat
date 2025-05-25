@@ -16,3 +16,27 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.yaml
     enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+application:
+  open-api:
+    email: ${spring.mail.sender.email}
+    server:  http://127.0.0.1:8222
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+  metrics:
+    tags:
+      application: mmf-ask-app
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+server:
+  port: 8222

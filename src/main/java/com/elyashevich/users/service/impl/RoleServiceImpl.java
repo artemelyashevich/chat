@@ -7,6 +7,10 @@ import com.elyashevich.users.repository.RoleRepository;
 import com.elyashevich.users.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +26,11 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
+    @Caching(
+            put = {
+                    @CachePut(value = "RoleServiceImpl::findByName", key = "#name"),
+            }
+    )
     public Role create(String name) {
         log.debug("Attempting create new role with name: {}", name);
 
@@ -36,6 +45,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Cacheable(value = "RoleServiceImpl::findByName", key = "#name")
     public Role findByName(String name) {
         log.debug("Attempting find role by name: {}", name);
 
@@ -53,6 +63,11 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
+    @Caching(
+            put = {
+                    @CachePut(value = "RoleServiceImpl::findByName", key = "#name"),
+            }
+    )
     public Role update(String oldName, String newName) {
         log.debug("Attempting update role with name: '{}' to name: {}", oldName, newName);
 
@@ -69,6 +84,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "RoleServiceImpl::findByName", key = "#name")
     public void delete(String name) {
         log.debug("Attempting delete role by name: {}", name);
         Role role = this.findByName(name);

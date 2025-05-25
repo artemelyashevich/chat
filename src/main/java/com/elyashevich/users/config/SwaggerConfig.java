@@ -17,9 +17,6 @@ public class SwaggerConfig {
     private static final String USER_SERVICE_DESCRIPTION = "This is a sample API documentation using Swagger";
     private static final String USER_SERVICE_VERSION = "1.0";
 
-    @Value("${application.open-api.email}")
-    private String email;
-
     @Value("${application.open-api.server}")
     private String serverUrl;
 
@@ -36,7 +33,6 @@ public class SwaggerConfig {
                                 .title(USER_SERVICE_TITLE)
                                 .description(USER_SERVICE_DESCRIPTION)
                                 .version(USER_SERVICE_VERSION)
-                                .contact(new Contact().email(this.email))
                 );
     }
 }

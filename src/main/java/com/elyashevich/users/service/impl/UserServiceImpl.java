@@ -9,6 +9,9 @@ import com.elyashevich.users.service.RoleService;
 import com.elyashevich.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @Caching(
+            put = {
+                    @CachePut(value = "UserServiceImpl::findByEmail", key = "#user.email"),
+            }
+    )
     public User save(User user) {
         log.debug("Attempting create new user: {}", user);
 
@@ -46,6 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "RoleServiceImpl::findByEmail", key = "#email")
     public User findByEmail(String email) {
         log.debug("Attempting fin user by email: '{}'", email);
 

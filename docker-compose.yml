@@ -29,6 +29,17 @@ services:
     volumes:
       - ./pgdata:/var/lib/postgresql/data/pgdata
 
+  redis:
+    container_name: redis
+    env_file:
+      - .env
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - spring-app
+
   prometheus:
     image: prom/prometheus:v2.55.1
     container_name: prometheus
@@ -49,7 +60,7 @@ services:
     environment:
       - GF_USERS_ALLOW_SIGN_UP=false
     volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/provisioning:/etc/grafanaconfig/provisioning
     depends_on:
       - prometheus
     healthcheck:
