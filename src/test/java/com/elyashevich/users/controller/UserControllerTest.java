@@ -11,7 +11,10 @@ import com.elyashevich.users.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -32,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 @DisplayName("User Controller Tests")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserControllerTest {
 
     @Autowired
@@ -76,6 +80,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Order(1)
     @DisplayName("GET /{email} - Success")
     void findByEmail_WithValidEmail_ReturnsUser() throws Exception {
         // Given
@@ -96,6 +101,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Order(2)
     @DisplayName("GET /{email} - Not Found")
     void findByEmail_WithNonExistingEmail_ReturnsNotFound() throws Exception {
         // Given
@@ -110,6 +116,7 @@ class UserControllerTest {
     }
 
     @ParameterizedTest
+    @Order(3)
     @NullAndEmptySource
     @DisplayName("GET /{email} - Bad Request (Invalid Email)")
     void findByEmail_WithInvalidEmail_ReturnsBadRequest(String invalidEmail) throws Exception {
@@ -120,6 +127,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Order(4)
     @DisplayName("POST / - Bad Request (Empty Body)")
     void create_WithEmptyBody_ReturnsBadRequest() throws Exception {
         mockMvc.perform(post("/api/v1/users")
@@ -130,6 +138,7 @@ class UserControllerTest {
     }
 
     @ParameterizedTest
+    @Order(5)
     @NullAndEmptySource
     @ValueSource(strings = {" ", "  "})
     @DisplayName("POST / - Bad Request (Blank First Name)")
@@ -150,6 +159,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Order(6)
     @DisplayName("POST / - Bad Request (Invalid Email)")
     void create_WithInvalidEmail_ReturnsBadRequest() throws Exception {
         UserRequestDto invalidDto = new UserRequestDto(
@@ -168,6 +178,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Order(7)
     @DisplayName("POST / - Bad Request (Weak Password)")
     void create_WithWeakPassword_ReturnsBadRequest() throws Exception {
         UserRequestDto invalidDto = new UserRequestDto(

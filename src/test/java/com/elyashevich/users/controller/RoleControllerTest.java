@@ -9,7 +9,10 @@ import com.elyashevich.users.service.RoleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(RoleController.class)
 @DisplayName("Role Controller Tests")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RoleControllerTest {
 
     @Autowired
@@ -55,6 +59,7 @@ class RoleControllerTest {
     }
 
     @Test
+    @Order(1)
     @DisplayName("GET /{name} - Success")
     void findByName_WithExistingName_ReturnsRole() throws Exception {
         given(roleService.findByName("ADMIN")).willReturn(testRole);
@@ -69,6 +74,7 @@ class RoleControllerTest {
     }
 
     @Test
+    @Order(2)
     @DisplayName("GET /{name} - Not Found")
     void findByName_WithNonExistingName_ReturnsNotFound() throws Exception {
         given(roleService.findByName("UNKNOWN"))
@@ -81,6 +87,7 @@ class RoleControllerTest {
     }
 
     @ParameterizedTest
+    @Order(3)
     @NullAndEmptySource
     @DisplayName("GET /{name} - Bad Request (Invalid Name)")
     void findByName_WithInvalidName_ReturnsBadRequest(String invalidName) throws Exception {
@@ -91,6 +98,7 @@ class RoleControllerTest {
     }
 
     @Test
+    @Order(4)
     @DisplayName("POST / - Success")
     void create_WithValidDto_ReturnsCreatedRole() throws Exception {
         given(roleService.create("ADMIN")).willReturn(testRole);
@@ -107,6 +115,7 @@ class RoleControllerTest {
     }
 
     @Test
+    @Order(5)
     @DisplayName("POST / - Bad request (Existing Role)")
     void create_WithExistingRole_ReturnsConflict() throws Exception {
         given(roleService.create("ADMIN"))
@@ -121,6 +130,7 @@ class RoleControllerTest {
     }
 
     @Test
+    @Order(6)
     @DisplayName("POST / - Bad Request (Empty Body)")
     void create_WithEmptyBody_ReturnsBadRequest() throws Exception {
         mockMvc.perform(post(BASE_URL)
@@ -131,6 +141,7 @@ class RoleControllerTest {
     }
 
     @Test
+    @Order(7)
     @DisplayName("POST / - Bad Request (Null Name)")
     void create_WithNullName_ReturnsBadRequest() throws Exception {
         RoleCreateDto invalidDto = new RoleCreateDto(null);
@@ -145,6 +156,7 @@ class RoleControllerTest {
 
     // PATCH /{oldName} Tests
     @Test
+    @Order(8)
     @DisplayName("PATCH /{oldName} - Success")
     void update_WithValidInput_ReturnsUpdatedRole() throws Exception {
         given(roleService.update("OLD_ROLE", "NEW_ROLE")).willReturn(testRole);
@@ -161,6 +173,7 @@ class RoleControllerTest {
     }
 
     @Test
+    @Order(9)
     @DisplayName("PATCH /{oldName} - Not Found")
     void update_WithNonExistingRole_ReturnsNotFound() throws Exception {
         given(roleService.update("OLD_ROLE", "NEW_ROLE"))
@@ -175,6 +188,7 @@ class RoleControllerTest {
     }
 
     @Test
+    @Order(10)
     @DisplayName("PATCH /{oldName} - Bad request")
     void update_WithExistingNewName_ReturnsConflict() throws Exception {
         given(roleService.update("OLD_ROLE", "EXISTING_ROLE"))
@@ -189,6 +203,7 @@ class RoleControllerTest {
     }
 
     @Test
+    @Order(11)
     @DisplayName("DELETE /{name} - Success")
     void delete_WithExistingName_ReturnsNoContent() throws Exception {
         mockMvc.perform(delete(BASE_URL + "/{name}", "ADMIN"))
@@ -198,6 +213,7 @@ class RoleControllerTest {
     }
 
     @Test
+    @Order(12)
     @DisplayName("DELETE /{name} - Not Found")
     void delete_WithNonExistingName_ReturnsNotFound() throws Exception {
         doThrow(new ResourceNotFoundException("Role not found"))
@@ -210,6 +226,7 @@ class RoleControllerTest {
     }
 
     @ParameterizedTest
+    @Order(13)
     @NullAndEmptySource
     @DisplayName("DELETE /{name} - Bad Request")
     void delete_WithInvalidName_ReturnsBadRequest(String invalidName) throws Exception {
